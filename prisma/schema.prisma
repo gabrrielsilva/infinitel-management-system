@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Gerencial {
+  id_sgi        Int     @id @default(autoincrement())
+  nome_projeto  String  @unique
+  tipo_projeto  String
+  estado        String
+  cidade        String
+  status_sgi    String
+
+  @@map("gerencial")
+}
+
+model Executivo {
+  id_sgi            Int       @id @default(autoincrement())
+  data_acionamento  DateTime
+  data_aceita_exec  DateTime
+  executor          String
+  status_tim        String?
+  data_tim          DateTime?
+  status_lic_tbr    String
+
+  @@map("executivo")
+}
+
+model Prefeitura {
+  id_sgi                Int         @id @default(autoincrement())
+  data_prevista         DateTime?
+  reprogramacao         DateTime?
+  atraso                Int?
+  data_real_protocolo   DateTime?
+  sla_x                 Int?
+  qtd_prefeitura        Int
+  num_protocolo         String?
+  status_operacional    String?
+  data_aprov_prevista   DateTime?
+  data_aprov_real       DateTime?
+  sla_y                 Int?
+  observacoes           String?
+
+  @@map("prefeitura")
+}
+
+model Energia {
+  id_sgi                Int         @id @default(autoincrement())
+  data_prevista         DateTime?
+  reprogramacao         DateTime?
+  atraso                Int?
+  data_real_protocolo   DateTime?
+  sla_x                 Int?
+  num_protocolo         String?
+  status_operacional    String?
+  data_aprov_prevista   DateTime?
+  data_aprov_real       DateTime?
+  sla_y                 Int?
+  observacoes           String?
+
+  @@map("energia")
+}
+
+model Rodovia {
+  id_sgi                Int        @id @default(autoincrement())
+  data_prevista         DateTime?
+  reprogramacao         DateTime?
+  atraso                Int?
+  data_real_protocolo   DateTime?
+  sla_x                 Int?
+  num_protocolo         String?
+  status_operacional    String?
+  data_aprov_prevista   DateTime?
+  data_aprov_real       DateTime?
+  sla_y                 Int?
+  observacoes           String?
+
+  @@map("rodovia")
+}
+
+model Outra {
+  id_sgi                Int        @id @default(autoincrement())
+  data_prevista         DateTime?
+  reprogramacao         DateTime?
+  atraso                Int?
+  data_real_protocolo   DateTime?
+  sla_x                 Int?
+  num_protocolo         String?
+  status_operacional    String?
+  data_aprov_prevista   DateTime?
+  data_aprov_real       DateTime?
+  sla_y                 Int?
+  observacoes           String?
+
+  @@map("outra")
+}
+
+model Observacoes {
+  id_sgi              Int   @id @default(autoincrement())
+  observacoes_gerais  String?
+
+  @@map("observacoes")
+}
