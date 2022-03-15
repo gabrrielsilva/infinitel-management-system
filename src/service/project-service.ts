@@ -1,15 +1,15 @@
-import { Gerencial } from '.prisma/client';
+import { Projeto } from '.prisma/client';
 import { projectData } from '../data/project-data';
 import { Project } from '../model/Project';
 
 class ProjectService {
-  getProjects(): Promise<Gerencial[] | null> {
+  getProjects(): Promise<Projeto[] | null> {
     return projectData.getProjects();
   }
 
-  async getProject(id: number): Promise<Gerencial | null> {
+  async getProject(id: number): Promise<Projeto | null> {
     const project = await projectData.getProject(id);
-    if (!project) throw new Error('Project not found');
+    if (!project) throw new Error('Projeto não encontrado');
     return project;
   }
 
@@ -18,8 +18,9 @@ class ProjectService {
     const existingNameProject = await projectData.getProjectByName(
       project.nome_projeto,
     );
-    if (existingIdProject || existingNameProject)
-      throw new Error('Project already exists');
+    if (existingIdProject || existingNameProject) {
+      throw new Error('Projeto já existe');
+    }
     return projectData.saveProject(project);
   }
 

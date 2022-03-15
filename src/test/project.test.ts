@@ -9,7 +9,12 @@ const generate = () => {
 };
 
 const request = (url: string, method: Method, data?: any) => {
-  return axios({ url, method, data });
+  return axios({
+    url,
+    method,
+    data,
+    validateStatus: null,
+  });
 };
 
 enum id {
@@ -18,7 +23,7 @@ enum id {
 }
 
 beforeAll(() => {
-  client.gerencial.deleteMany();
+  client.projeto.deleteMany();
 });
 
 it('should get projects', async () => {
@@ -29,6 +34,12 @@ it('should get projects', async () => {
     estado: generate(),
     cidade: generate(),
     status_sgi: generate(),
+    executivo: undefined,
+    prefeitura: undefined,
+    energia: undefined,
+    rodovia: undefined,
+    outra: undefined,
+    observacoes: undefined,
   });
   await projectService.saveProject({
     id_sgi: id.b,
@@ -37,9 +48,15 @@ it('should get projects', async () => {
     estado: generate(),
     cidade: generate(),
     status_sgi: generate(),
+    executivo: undefined,
+    prefeitura: undefined,
+    energia: undefined,
+    rodovia: undefined,
+    outra: undefined,
+    observacoes: undefined,
   });
 
-  const response = await request('http://localhost:3000/projects', 'GET');
+  const response = await request('http://localhost:3000/projetos', 'GET');
   const projects = response.data;
 
   expect(response.status).toBe(200);
@@ -57,6 +74,12 @@ it('should get a project', async () => {
     estado: generate(),
     cidade: generate(),
     status_sgi: generate(),
+    executivo: undefined,
+    prefeitura: undefined,
+    energia: undefined,
+    rodovia: undefined,
+    outra: undefined,
+    observacoes: undefined,
   });
   await projectService.saveProject({
     id_sgi: id.b,
@@ -65,10 +88,16 @@ it('should get a project', async () => {
     estado: generate(),
     cidade: generate(),
     status_sgi: generate(),
+    executivo: undefined,
+    prefeitura: undefined,
+    energia: undefined,
+    rodovia: undefined,
+    outra: undefined,
+    observacoes: undefined,
   });
 
   const response = await request(
-    `http://localhost:3000/projects/${id.a}`,
+    `http://localhost:3000/projetos/${id.a}`,
     'GET',
   );
   const project = response.data;
@@ -86,8 +115,18 @@ it('should save a project', async () => {
     estado: generate(),
     cidade: generate(),
     status_sgi: generate(),
+    executivo: undefined,
+    prefeitura: undefined,
+    energia: undefined,
+    rodovia: undefined,
+    outra: undefined,
+    observacoes: undefined,
   };
-  const response = await request('http://localhost:3000/project', 'POST', data);
+  const response = await request(
+    'http://localhost:3000/projetos',
+    'POST',
+    data,
+  );
   expect(response.status).toBe(201);
   const project = JSON.parse(response.config.data);
 
@@ -97,12 +136,132 @@ it('should save a project', async () => {
   expect(project.estado).toBe(data.estado);
   expect(project.cidade).toBe(data.cidade);
   expect(project.status_sgi).toBe(data.status_sgi);
+  expect(project.executivo).toBe(data.executivo);
+  expect(project.prefeitura).toBe(data.prefeitura);
+  expect(project.energia).toBe(data.energia);
+  expect(project.rodovia).toBe(data.rodovia);
+  expect(project.outra).toBe(data.outra);
+  expect(project.observacoes).toBe(data.observacoes);
 
   await projectService.deleteProject(id.a);
 });
 
-// it('should save project sheets');
-// it('should not save a project');
-// it('should update a project');
-// it('should not update a project');
-// it('should delete project');
+it('should not save a project', async () => {
+  const data: Project = {
+    id_sgi: id.a,
+    nome_projeto: generate(),
+    tipo_projeto: generate(),
+    estado: generate(),
+    cidade: generate(),
+    status_sgi: generate(),
+    executivo: undefined,
+    prefeitura: undefined,
+    energia: undefined,
+    rodovia: undefined,
+    outra: undefined,
+    observacoes: undefined,
+  };
+
+  const response1 = await request(
+    'http://localhost:3000/projetos',
+    'POST',
+    data,
+  );
+
+  const response2 = await request(
+    'http://localhost:3000/projetos',
+    'POST',
+    data,
+  );
+
+  expect(response1.status).toBe(201);
+  expect(response2.status).toBe(409);
+  expect(response2.data).toBe('Projeto já existe');
+
+  await projectService.deleteProject(id.a);
+});
+
+it('should update a project', async () => {
+  await projectService.saveProject({
+    id_sgi: id.a,
+    nome_projeto: generate(),
+    tipo_projeto: generate(),
+    estado: generate(),
+    cidade: generate(),
+    status_sgi: generate(),
+    executivo: undefined,
+    prefeitura: undefined,
+    energia: undefined,
+    rodovia: undefined,
+    outra: undefined,
+    observacoes: undefined,
+  });
+
+  const response1 = await request(
+    `http://localhost:3000/projetos/${id.a}`,
+    'GET',
+  );
+  const project: Project = response1.data;
+
+  project.nome_projeto = generate();
+  project.tipo_projeto = generate();
+  project.estado = generate();
+  project.cidade = generate();
+  project.status_sgi = generate();
+
+  const response2 = await request(
+    `http://localhost:3000/projetos/${id.a}`,
+    'PUT',
+    project,
+  );
+  expect(response2.status).toBe(204);
+
+  const updatedProject = await projectService.getProject(project.id_sgi);
+  expect(updatedProject?.nome_projeto).toBe(project.nome_projeto);
+  expect(updatedProject?.tipo_projeto).toBe(project.tipo_projeto);
+  expect(updatedProject?.estado).toBe(project.estado);
+  expect(updatedProject?.cidade).toBe(project.cidade);
+  expect(updatedProject?.status_sgi).toBe(project.status_sgi);
+
+  await projectService.deleteProject(id.a);
+});
+
+it('should not update a project', async () => {
+  const project = {
+    id: 10,
+  };
+
+  const response = await request(
+    `http://localhost:3000/projetos/${project.id}`,
+    'PUT',
+    project,
+  );
+
+  expect(response.status).toBe(404);
+});
+
+it('should delete a project', async () => {
+  await projectService.saveProject({
+    id_sgi: id.a,
+    nome_projeto: generate(),
+    tipo_projeto: generate(),
+    estado: generate(),
+    cidade: generate(),
+    status_sgi: generate(),
+    executivo: undefined,
+    prefeitura: undefined,
+    energia: undefined,
+    rodovia: undefined,
+    outra: undefined,
+    observacoes: undefined,
+  });
+
+  const response = await request(
+    `http://localhost:3000/projetos/${id.a}`,
+    'DELETE',
+  );
+  expect(response.status).toBe(204);
+
+  const projects = await projectService.getProjects();
+  expect(projects).toHaveLength(0);
+});

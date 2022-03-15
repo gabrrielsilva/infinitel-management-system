@@ -7,41 +7,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Gerencial {
-  id_sgi        Int     @id @default(autoincrement())
-  nome_projeto  String  @unique
+model Projeto {
+  id_sgi        Int         @id @default(autoincrement())
+  nome_projeto  String      @unique
   tipo_projeto  String
   estado        String
   cidade        String
   status_sgi    String
+  executivo     Executivo?
+  prefeitura    Prefeitura?
+  energia       Energia?
+  rodovia       Rodovia?
+  outra         Outra?
+  observacoes   Observacoes?
 
-  @@map("gerencial")
+  @@map("projeto")
 }
 
 model Executivo {
-  id_sgi            Int       @id @default(autoincrement())
-  data_acionamento  DateTime
-  data_aceita_exec  DateTime
+  projeto           Projeto     @relation(fields: [projeto_id], references: [id_sgi])
+  projeto_id        Int         @id @default(autoincrement())
+  data_acionamento  String
+  data_aceita_exec  String
   executor          String
   status_tim        String?
-  data_tim          DateTime?
+  data_tim          String?
   status_lic_tbr    String
 
   @@map("executivo")
 }
 
 model Prefeitura {
-  id_sgi                Int         @id @default(autoincrement())
-  data_prevista         DateTime?
-  reprogramacao         DateTime?
+  projeto               Projeto   @relation(fields: [projeto_id], references: [id_sgi])
+  projeto_id            Int       @id @default(autoincrement())
+  data_prevista         String?
+  reprogramacao         String?
   atraso                Int?
-  data_real_protocolo   DateTime?
+  data_real_protocolo   String?
   sla_x                 Int?
   qtd_prefeitura        Int
   num_protocolo         String?
   status_operacional    String?
-  data_aprov_prevista   DateTime?
-  data_aprov_real       DateTime?
+  data_aprov_prevista   String?
+  data_aprov_real       String?
   sla_y                 Int?
   observacoes           String?
 
@@ -49,16 +57,17 @@ model Prefeitura {
 }
 
 model Energia {
-  id_sgi                Int         @id @default(autoincrement())
-  data_prevista         DateTime?
-  reprogramacao         DateTime?
+  projeto               Projeto     @relation(fields: [projeto_id], references: [id_sgi])
+  projeto_id            Int         @id @default(autoincrement())
+  data_prevista         String?
+  reprogramacao         String?
   atraso                Int?
-  data_real_protocolo   DateTime?
+  data_real_protocolo   String?
   sla_x                 Int?
   num_protocolo         String?
   status_operacional    String?
-  data_aprov_prevista   DateTime?
-  data_aprov_real       DateTime?
+  data_aprov_prevista   String?
+  data_aprov_real       String?
   sla_y                 Int?
   observacoes           String?
 
@@ -66,16 +75,17 @@ model Energia {
 }
 
 model Rodovia {
-  id_sgi                Int        @id @default(autoincrement())
-  data_prevista         DateTime?
-  reprogramacao         DateTime?
+  projeto               Projeto     @relation(fields: [projeto_id], references: [id_sgi])
+  projeto_id            Int         @id @default(autoincrement())
+  data_prevista         String?
+  reprogramacao         String?
   atraso                Int?
-  data_real_protocolo   DateTime?
+  data_real_protocolo   String?
   sla_x                 Int?
   num_protocolo         String?
   status_operacional    String?
-  data_aprov_prevista   DateTime?
-  data_aprov_real       DateTime?
+  data_aprov_prevista   String?
+  data_aprov_real       String?
   sla_y                 Int?
   observacoes           String?
 
@@ -83,16 +93,17 @@ model Rodovia {
 }
 
 model Outra {
-  id_sgi                Int        @id @default(autoincrement())
-  data_prevista         DateTime?
-  reprogramacao         DateTime?
+  projeto               Projeto     @relation(fields: [projeto_id], references: [id_sgi])
+  projeto_id            Int         @id @default(autoincrement())
+  data_prevista         String?
+  reprogramacao         String?
   atraso                Int?
-  data_real_protocolo   DateTime?
+  data_real_protocolo   String?
   sla_x                 Int?
   num_protocolo         String?
   status_operacional    String?
-  data_aprov_prevista   DateTime?
-  data_aprov_real       DateTime?
+  data_aprov_prevista   String?
+  data_aprov_real       String?
   sla_y                 Int?
   observacoes           String?
 
@@ -100,7 +111,8 @@ model Outra {
 }
 
 model Observacoes {
-  id_sgi              Int   @id @default(autoincrement())
+  projeto             Projeto     @relation(fields: [projeto_id], references: [id_sgi])
+  projeto_id          Int         @id @default(autoincrement())
   observacoes_gerais  String?
 
   @@map("observacoes")

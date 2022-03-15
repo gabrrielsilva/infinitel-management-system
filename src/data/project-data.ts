@@ -1,14 +1,14 @@
-import { Gerencial } from '.prisma/client';
+import { Projeto } from '.prisma/client';
 import { client } from '../../db/client';
 import { Project } from '../model/Project';
 
 class ProjectData {
-  getProjects(): Promise<Gerencial[] | null> {
-    return client.gerencial.findMany();
+  getProjects(): Promise<Projeto[] | null> {
+    return client.projeto.findMany();
   }
 
-  getProject(id: number): Promise<Gerencial | null> {
-    const projectSurvey = client.gerencial.findUnique({
+  getProject(id: number): Promise<Projeto | null> {
+    const projectSurvey = client.projeto.findUnique({
       where: {
         id_sgi: id,
       },
@@ -17,8 +17,8 @@ class ProjectData {
     return projectSurvey;
   }
 
-  getProjectByName(name: string): Promise<Gerencial | null> {
-    const projectSurveyByName = client.gerencial.findUnique({
+  getProjectByName(name: string): Promise<Projeto | null> {
+    const projectSurveyByName = client.projeto.findUnique({
       where: {
         nome_projeto: name,
       },
@@ -28,7 +28,7 @@ class ProjectData {
   }
 
   async saveProject(project: Project): Promise<void> {
-    await client.gerencial.create({
+    await client.projeto.create({
       data: {
         id_sgi: project.id_sgi,
         nome_projeto: project.nome_projeto,
@@ -40,7 +40,7 @@ class ProjectData {
     });
   }
 
-  // save worksheet with all projects in database
+  // save spreadsheet with all projects in database
   async saveProjects(projects: Project[]): Promise<void> {
     for await (const {
       id_sgi,
@@ -50,7 +50,7 @@ class ProjectData {
       cidade,
       status_sgi,
     } of projects) {
-      await client.gerencial.create({
+      await client.projeto.create({
         data: {
           id_sgi,
           nome_projeto,
@@ -64,7 +64,7 @@ class ProjectData {
   }
 
   async updateProject(project: Project): Promise<void> {
-    await client.gerencial.update({
+    await client.projeto.update({
       data: {
         id_sgi: project.id_sgi,
         nome_projeto: project.nome_projeto,
@@ -80,7 +80,7 @@ class ProjectData {
   }
 
   async deleteProject(id: number): Promise<void> {
-    await client.gerencial.delete({
+    await client.projeto.delete({
       where: {
         id_sgi: id,
       },
@@ -89,7 +89,7 @@ class ProjectData {
 
   async findMaxId() {
     const maxId: Array<{ max: number }> =
-      await client.$queryRaw`SELECT MAX(id_sgi) FROM gerencial`;
+      await client.$queryRaw`SELECT MAX(id_sgi) FROM projeto`;
     return maxId;
   }
 }

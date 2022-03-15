@@ -1,17 +1,13 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import multer from 'multer';
-import { Readable } from 'stream';
-import readline from 'readline';
 
 import { Project } from '../model/Project';
 import { projectService } from '../service/project-service';
 import { projectData } from '../data/project-data';
 
-const router = Router();
-const multerConfig = multer();
+const projectRouter = Router();
 
-router.get(
-  '/projects',
+projectRouter.get(
+  '/projetos',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const projects = await projectService.getProjects();
@@ -22,8 +18,8 @@ router.get(
   },
 );
 
-router.get(
-  '/projects/:id',
+projectRouter.get(
+  '/projetos/:id',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await projectService.getProject(Number(req.params.id));
@@ -34,16 +30,19 @@ router.get(
   },
 );
 
-router.post(
-  '/project',
+projectRouter.post(
+  '/projetos',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project: Project = req.body;
-      const maxId = await projectData.findMaxId();
+
+      // In findMaxId() the 'queryRaw' of Prisma return: [{max: x}]
+      const maxIdFound = await projectData.findMaxId();
+      const maxIdFormat = maxIdFound[0].max;
 
       await projectService.saveProject({
         ...project,
-        id_sgi: project.id_sgi ?? maxId[0].max + 1,
+        id_sgi: project.id_sgi ?? maxIdFormat + 1,
       });
 
       return res.status(201).end();
@@ -53,47 +52,8 @@ router.post(
   },
 );
 
-router.post(
-  '/projects',
-  multerConfig.single('file'),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { file } = req;
-      const { buffer } = file as Express.Multer.File;
-
-      const readableFile = new Readable();
-      readableFile.push(buffer);
-      readableFile.push(null);
-
-      const projectsLine = readline.createInterface({
-        input: readableFile,
-      });
-
-      const projects: Project[] = [];
-
-      for await (const line of projectsLine) {
-        const projectsLineSplit = line.split(';');
-        projects.push({
-          id_sgi: Number(projectsLineSplit[0]),
-          nome_projeto: projectsLineSplit[1],
-          tipo_projeto: projectsLineSplit[2],
-          estado: projectsLineSplit[3],
-          cidade: projectsLineSplit[4],
-          status_sgi: projectsLineSplit[5],
-        });
-      }
-
-      await projectData.saveProjects(projects);
-
-      return res.json(projects);
-    } catch (e) {
-      next(e);
-    }
-  },
-);
-
-router.put(
-  '/projects/:id',
+projectRouter.put(
+  '/projetos/:id',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project: Project = req.body;
@@ -110,8 +70,8 @@ router.put(
   },
 );
 
-router.delete(
-  '/projects/:id',
+projectRouter.delete(
+  '/projetos/:id',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await projectService.deleteProject(Number(req.params.id));
@@ -122,4 +82,4 @@ router.delete(
   },
 );
 
-export { router };
+export { projectRouter };
