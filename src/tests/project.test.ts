@@ -22,7 +22,7 @@ enum id {
   b,
 }
 
-beforeAll(() => {
+afterAll(() => {
   client.projeto.deleteMany();
 });
 
@@ -81,20 +81,6 @@ it('should get a project', async () => {
     outra: undefined,
     observacoes: undefined,
   });
-  await projectService.saveProject({
-    id_sgi: id.b,
-    nome_projeto: generate(),
-    tipo_projeto: generate(),
-    estado: generate(),
-    cidade: generate(),
-    status_sgi: generate(),
-    executivo: undefined,
-    prefeitura: undefined,
-    energia: undefined,
-    rodovia: undefined,
-    outra: undefined,
-    observacoes: undefined,
-  });
 
   const response = await request(
     `http://localhost:3000/projetos/${id.a}`,
@@ -104,7 +90,6 @@ it('should get a project', async () => {
   expect(project.id_sgi).toBe(id.a);
 
   await projectService.deleteProject(id.a);
-  await projectService.deleteProject(id.b);
 });
 
 it('should save a project', async () => {
@@ -238,6 +223,7 @@ it('should not update a project', async () => {
   );
 
   expect(response.status).toBe(404);
+  expect(response.data).toBe('Projeto não encontrado');
 });
 
 it('should delete a project', async () => {

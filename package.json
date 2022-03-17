@@ -11,7 +11,7 @@
   },
   "keywords": [],
   "author": "Gabriel Silva",
-  "license": "UNLICENSED",
+  "license": "",
   "dependencies": {
     "@prisma/client": "^3.10.0",
     "express": "^4.17.3",

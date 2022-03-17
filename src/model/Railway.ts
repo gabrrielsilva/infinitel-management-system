@@ -1,6 +1,5 @@
-export interface Other {
-  id: string;
-  project_id: number;
+export interface Railway {
+  projeto_id: number;
   data_prevista: string;
   reprogramacao: string;
   atraso: number;

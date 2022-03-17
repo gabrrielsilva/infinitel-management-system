@@ -1,32 +1,41 @@
 import { NextFunction, Request, Response } from 'express';
 
-export const errorHandler = (
+export const errorHandler = async (
   err: Error,
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  // Conflict
-  if (err.message === 'Projeto já existe') {
-    return res.status(409).send(err.message);
-  }
-  if (err.message === 'Projeto executivo já existe') {
-    return res.status(409).send(err.message);
-  }
+  const conflictMessages: string[] = [
+    'Projeto já existe',
+    'Projeto executivo já existe',
+    'Projeto de prefeitura já existe',
+    'Projeto de energia já existe',
+    'Projeto de rodovia já existe',
+    'Projeto de ferrovia já existe',
+  ];
 
-  // Not Found
-  if (err.message === 'Projeto não encontrado') {
-    return res.status(404).send(err.message);
-  }
-  if (err.message === 'Projeto executivo não encontrado') {
-    return res.status(404).send(err.message);
-  }
-  if (
-    err.message ===
-    'Projeto não existe, não é possível defini-lo como executivo'
-  ) {
-    return res.status(404).send(err.message);
-  }
+  const notFoundMessages: string[] = [
+    'Projeto não encontrado',
+    'Projeto executivo não encontrado',
+    'Projeto de prefeitura não encontrado',
+    'Projeto de energia não encontrado',
+    'Projeto de rodovia não encontrado',
+    'Projeto de ferrovia não encontrado',
+    'Observação não encontrada',
+  ];
+
+  conflictMessages.forEach((msg) => {
+    if (err.message === msg) {
+      return res.status(409).send(err.message);
+    }
+  });
+
+  notFoundMessages.forEach((msg) => {
+    if (err.message === msg) {
+      return res.status(404).send(err.message);
+    }
+  });
 
   res.status(500).send(err.message);
 };

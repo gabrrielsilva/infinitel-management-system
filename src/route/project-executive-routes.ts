@@ -51,7 +51,11 @@ executiveRouter.put(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const executiveProject: Executive = req.body;
-      await executiveService.updateExecutiveProject(executiveProject);
+      const projetoId = Number(req.params.id);
+      await executiveService.updateExecutiveProject({
+        ...executiveProject,
+        projeto_id: projetoId,
+      });
 
       res.status(204).end();
     } catch (e) {

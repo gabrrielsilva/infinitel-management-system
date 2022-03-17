@@ -1,6 +1,5 @@
 export interface Highway {
-  id: string;
-  project_id: number;
+  projeto_id: number;
   data_prevista: string;
   reprogramacao: string;
   atraso: number;

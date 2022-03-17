@@ -17,10 +17,10 @@ class ExecutiveService {
   }
 
   async saveExecutiveProject(executiveProject: Executive): Promise<void> {
-    await projectService.getProject(executiveProject.project_id);
+    await projectService.getProject(executiveProject.projeto_id);
 
     const existingExecutiveProject = await executiveData.getExecutiveProject(
-      executiveProject.project_id,
+      executiveProject.projeto_id,
     );
 
     if (existingExecutiveProject) {
@@ -32,7 +32,7 @@ class ExecutiveService {
 
   async updateExecutiveProject(executiveProject: Executive): Promise<void> {
     const existingProject = await executiveService.getExecutiveProject(
-      executiveProject.project_id,
+      executiveProject.projeto_id,
     );
 
     if (!existingProject) {

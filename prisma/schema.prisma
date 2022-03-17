@@ -18,7 +18,7 @@ model Projeto {
   prefeitura    Prefeitura?
   energia       Energia?
   rodovia       Rodovia?
-  outra         Outra?
+  outra         Ferrovia?
   observacoes   Observacoes?
 
   @@map("projeto")
@@ -92,7 +92,7 @@ model Rodovia {
   @@map("rodovia")
 }
 
-model Outra {
+model Ferrovia {
   projeto               Projeto     @relation(fields: [projeto_id], references: [id_sgi])
   projeto_id            Int         @id @default(autoincrement())
   data_prevista         String?
@@ -107,7 +107,7 @@ model Outra {
   sla_y                 Int?
   observacoes           String?
 
-  @@map("outra")
+  @@map("ferrovia")
 }
 
 model Observacoes {

@@ -20,7 +20,7 @@ class ExecutiveData {
   async saveExecutiveProject(executiveProject: Executive): Promise<void> {
     await client.executivo.create({
       data: {
-        projeto_id: executiveProject.project_id,
+        projeto_id: executiveProject.projeto_id,
         data_acionamento: executiveProject.data_acionamento,
         data_aceita_exec: executiveProject.data_aceita_exec,
         executor: executiveProject.executor,
@@ -34,7 +34,6 @@ class ExecutiveData {
   async updateExecutiveProject(executiveProject: Executive): Promise<void> {
     await client.executivo.update({
       data: {
-        projeto_id: executiveProject.project_id,
         data_acionamento: executiveProject.data_acionamento,
         data_aceita_exec: executiveProject.data_aceita_exec,
         executor: executiveProject.executor,
@@ -43,7 +42,7 @@ class ExecutiveData {
         status_lic_tbr: executiveProject.status_lic_tbr,
       },
       where: {
-        projeto_id: executiveProject.project_id,
+        projeto_id: executiveProject.projeto_id,
       },
     });
   }

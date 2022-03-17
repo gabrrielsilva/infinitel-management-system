@@ -1,6 +1,5 @@
 export interface Executive {
-  id: string;
-  project_id: number;
+  projeto_id: number;
   data_acionamento: string;
   data_aceita_exec: string;
   executor: string;

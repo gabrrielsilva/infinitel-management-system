@@ -1,8 +1,8 @@
-import { Comments } from './Comments';
+import { Comment } from './Comment';
 import { Energy } from './Energy';
 import { Executive } from './Executive';
 import { Highway } from './Highway';
-import { Other } from './Other';
+import { Railway } from './Railway';
 import { Prefecture } from './Prefecture';
 
 export interface Project {
@@ -16,6 +16,6 @@ export interface Project {
   prefeitura: Prefecture | undefined;
   energia: Energy | undefined;
   rodovia: Highway | undefined;
-  outra: Other | undefined;
-  observacoes: Comments | undefined;
+  outra: Railway | undefined;
+  observacoes: Comment | undefined;
 }
