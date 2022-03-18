@@ -25,17 +25,11 @@ export const errorHandler = async (
     'Observação não encontrada',
   ];
 
-  conflictMessages.forEach((msg) => {
-    if (err.message === msg) {
-      return res.status(409).send(err.message);
-    }
-  });
-
-  notFoundMessages.forEach((msg) => {
-    if (err.message === msg) {
-      return res.status(404).send(err.message);
-    }
-  });
-
-  res.status(500).send(err.message);
+  if (conflictMessages.find((msg) => msg === err.message)) {
+    return res.status(409).send(err.message);
+  } else if (notFoundMessages.find((msg) => msg === err.message)) {
+    return res.status(404).send(err.message);
+  } else {
+    return res.status(500).send(err.message);
+  }
 };

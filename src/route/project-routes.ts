@@ -63,7 +63,7 @@ projectRouter.put(
         id_sgi: Number(req.params.id),
       });
 
-      res.status(204).end();
+      return res.status(204).end();
     } catch (e) {
       next(e);
     }
@@ -75,7 +75,7 @@ projectRouter.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await projectService.deleteProject(Number(req.params.id));
-      res.status(204).end();
+      return res.status(204).end();
     } catch (e) {
       next(e);
     }

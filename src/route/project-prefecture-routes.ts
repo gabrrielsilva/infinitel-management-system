@@ -58,7 +58,7 @@ prefectureRouter.put(
         projeto_id: projetoId,
       });
 
-      res.status(204).end();
+      return res.status(204).end();
     } catch (e) {
       next(e);
     }
@@ -71,7 +71,7 @@ prefectureRouter.delete(
     try {
       await prefectureService.deletePrefectureProject(Number(req.params.id));
 
-      res.status(204).end();
+      return res.status(204).end();
     } catch (e) {
       next(e);
     }

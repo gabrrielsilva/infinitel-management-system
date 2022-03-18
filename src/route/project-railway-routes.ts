@@ -57,7 +57,7 @@ railwayRouter.put(
         projeto_id: projetoId,
       });
 
-      res.status(204).end();
+      return res.status(204).end();
     } catch (e) {
       next(e);
     }
@@ -70,7 +70,7 @@ railwayRouter.delete(
     try {
       await railwayService.deleteRailwayProject(Number(req.params.id));
 
-      res.status(204).end();
+      return res.status(204).end();
     } catch (e) {
       next(e);
     }

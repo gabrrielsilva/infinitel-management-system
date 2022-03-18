@@ -57,7 +57,7 @@ energyRouter.put(
         projeto_id: projetoId,
       });
 
-      res.status(204).end();
+      return res.status(204).end();
     } catch (e) {
       next(e);
     }
@@ -70,7 +70,7 @@ energyRouter.delete(
     try {
       await energyService.deleteEnergyProject(Number(req.params.id));
 
-      res.status(204).end();
+      return res.status(204).end();
     } catch (e) {
       next(e);
     }
